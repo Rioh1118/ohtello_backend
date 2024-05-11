@@ -1,0 +1,11 @@
+/Users/riohatta/RustroverProjects/othello_api/target/debug/deps/libbitflags-413475718772f070.rmeta: /Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/lib.rs /Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/iter.rs /Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/parser.rs /Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/traits.rs /Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/public.rs /Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/internal.rs /Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/external.rs
+
+/Users/riohatta/RustroverProjects/othello_api/target/debug/deps/bitflags-413475718772f070.d: /Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/lib.rs /Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/iter.rs /Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/parser.rs /Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/traits.rs /Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/public.rs /Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/internal.rs /Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/external.rs
+
+/Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/lib.rs:
+/Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/iter.rs:
+/Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/parser.rs:
+/Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/traits.rs:
+/Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/public.rs:
+/Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/internal.rs:
+/Users/riohatta/.cargo/registry/src/index.crates.io-6f17d22bba15001f/bitflags-2.5.0/src/external.rs:
