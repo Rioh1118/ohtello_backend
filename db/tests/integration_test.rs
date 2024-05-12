@@ -30,7 +30,7 @@ fn test_get_user_by_id() {
 
 #[test]
 fn test_create_new_game() {
-    let mut con = match db::establish_connection(){
+    let mut con = match db::establish_connection() {
         Ok(con) => con,
         Err(e) => panic!("failed to establish connection : {:?}", e),
     };
@@ -48,7 +48,7 @@ fn test_create_new_game() {
 
 #[test]
 fn test_get_game_by_id() {
-    let mut con = match db::establish_connection(){
+    let mut con = match db::establish_connection() {
         Ok(con) => con,
         Err(e) => panic!("failed to establish connection : {:?}", e),
     };
@@ -64,7 +64,7 @@ fn test_get_game_by_id() {
 
 #[test]
 fn test_update_game_phase() {
-    let mut con = match db::establish_connection(){
+    let mut con = match db::establish_connection() {
         Ok(con) => con,
         Err(e) => panic!("failed to establish connection : {:?}", e),
     };
@@ -83,14 +83,14 @@ fn test_update_game_phase() {
             assert_eq!(updated_game.white_board, white);
             assert_eq!(updated_game.current_turn, next_turn);
             assert_eq!(updated_game.status, status);
-        },
+        }
         Err(e) => panic!("failed to update game phase : {:?}", e),
     }
 }
 
 #[test]
 fn test_create_history() {
-    let mut con = match db::establish_connection(){
+    let mut con = match db::establish_connection() {
         Ok(con) => con,
         Err(e) => panic!("failed to establish connection : {:?}", e),
     };
@@ -107,7 +107,7 @@ fn test_create_history() {
 
 #[test]
 fn test_get_history_by_game_id() {
-    let mut con = match db::establish_connection(){
+    let mut con = match db::establish_connection() {
         Ok(con) => con,
         Err(e) => panic!("failed to establish connection : {:?}", e),
     };

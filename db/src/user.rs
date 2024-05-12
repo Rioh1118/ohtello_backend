@@ -1,12 +1,16 @@
-use diesel::{insert_into, pg::PgConnection};
+use crate::error::DbError;
 use crate::models::*;
 use diesel::prelude::*;
-use crate::error::DbError;
+use diesel::{insert_into, pg::PgConnection};
 
-
-pub fn create_user<'b>(con: &mut PgConnection, name: &'b str, email: &'b str, password: &'b str) -> Result<i32, DbError> {
-    use crate::schema::users::dsl::users;
+pub fn create_user<'b>(
+    con: &mut PgConnection,
+    name: &'b str,
+    email: &'b str,
+    password: &'b str,
+) -> Result<i32, DbError> {
     use crate::schema;
+    use crate::schema::users::dsl::users;
 
     let new_user = NewUser {
         name,
@@ -14,11 +18,14 @@ pub fn create_user<'b>(con: &mut PgConnection, name: &'b str, email: &'b str, pa
         password,
     };
 
-    let result = insert_into(users).values(&new_user).returning(schema::users::id).get_result(con)?;
+    let result = insert_into(users)
+        .values(&new_user)
+        .returning(schema::users::id)
+        .get_result(con)?;
     Ok(result)
 }
 
-pub fn get_user_by_id(con: &mut PgConnection ,user_id: i32) -> Result<User, DbError>{
+pub fn get_user_by_id(con: &mut PgConnection, user_id: i32) -> Result<User, DbError> {
     use crate::schema::users::dsl::*;
 
     let user = users.filter(id.eq(user_id)).first(con)?;

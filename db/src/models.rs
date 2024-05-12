@@ -1,8 +1,10 @@
-use diesel::prelude::*;
 use crate::schema::*;
+use diesel::prelude::*;
+use serde::{Deserialize, Serialize};
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = users)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
+#[derive(Serialize)]
 pub struct User {
     pub id: i32,
     pub name: String,
@@ -22,6 +24,7 @@ pub struct NewUser<'a> {
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = games)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
+#[derive(Serialize)]
 pub struct Game {
     pub game_id: i32,
     pub player1_id: i32,
@@ -69,7 +72,6 @@ pub struct NewMove {
     pub move_y: Option<i32>,
     pub created_at: chrono::NaiveDateTime,
 }
-
 
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = histories)]

@@ -27,38 +27,32 @@ pub struct State {
     /// |56 57 58 59 60 61 62 63|
     pub pieces: [u8; 64], // 自分の石配置
     pub enemy_pieces: [u8; 64], // 相手の石配置
-    pub depth: u8, // ターン数
+    pub depth: u8,              // ターン数
 }
 
 /// 行動
-#[derive(PartialEq,Clone, Copy)]
+#[derive(PartialEq, Clone, Copy)]
 pub enum Action {
     /// 石を置く
     Put(u8),
     /// パス
-    Pass
+    Pass,
 }
 
 impl Default for State {
     fn default() -> Self {
         State {
             pass_end: false,
-            pieces: [0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,
-                0,0,0,1,0,0,0,0,
-                0,0,0,0,1,0,0,0,
-                0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0],
-            enemy_pieces: [0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,
-                0,0,0,0,1,0,0,0,
-                0,0,0,1,0,0,0,0,
-                0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0],
+            pieces: [
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+            ],
+            enemy_pieces: [
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+            ],
             depth: 0,
         }
     }
@@ -99,23 +93,27 @@ impl State {
         let mut state = State::new(self.pieces, self.enemy_pieces, self.depth + 1, false);
 
         if let Action::Put(pos) = action {
-            state.is_legal_action_xy(pos%8, pos/8, true);
+            state.is_legal_action_xy(pos % 8, pos / 8, true);
         }
 
         std::mem::swap(&mut state.pieces, &mut state.enemy_pieces);
 
-        if action == Action::Pass && state.legal_actions().len() == 1 && state.legal_actions().contains(&Action::Pass) { // 直す
+        if action == Action::Pass
+            && state.legal_actions().len() == 1
+            && state.legal_actions().contains(&Action::Pass)
+        {
+            // 直す
             state.pass_end = true;
         }
         state
     }
     /// 合法手のリストを取得
-    pub fn legal_actions(&mut self) -> Vec<Action>{
+    pub fn legal_actions(&mut self) -> Vec<Action> {
         let mut actions: Vec<Action> = Vec::new();
         for i in 0..8 {
             for j in 0..8 {
                 if self.is_legal_action_xy(i, j, false) {
-                    actions.push(Action::Put(i+j*8))
+                    actions.push(Action::Put(i + j * 8))
                 }
             }
         }
@@ -126,7 +124,7 @@ impl State {
     }
 
     fn is_legal_action_xy_dxy(&mut self, x: u8, y: u8, direction: Direction, flip: bool) -> bool {
-        let (dx,dy) = match direction {
+        let (dx, dy) = match direction {
             Direction::Up => (0, -1),
             Direction::Down => (0, 1),
             Direction::Left => (-1, 0),
@@ -140,28 +138,35 @@ impl State {
         let mut y = y as i8 + dy;
 
         // 一つ目は相手の石でないといけない
-        if !(0..=7).contains(&y) || !(0..=7).contains(&x) || self.enemy_pieces[(x+y*8) as usize] != 1 {
+        if !(0..=7).contains(&y)
+            || !(0..=7).contains(&x)
+            || self.enemy_pieces[(x + y * 8) as usize] != 1
+        {
             return false;
         }
 
         // 二つ目以降
         for _j in 0..8 {
             // 空の時
-            if !(0..=7).contains(&y) || !(0..=7).contains(&x) || (self.enemy_pieces[(x+y*8) as usize] == 0 && self.pieces[(x+y*8) as usize] == 0) {
+            if !(0..=7).contains(&y)
+                || !(0..=7).contains(&x)
+                || (self.enemy_pieces[(x + y * 8) as usize] == 0
+                    && self.pieces[(x + y * 8) as usize] == 0)
+            {
                 return false;
             }
             // 自分の石の時
-            if self.pieces[(x+y*8) as usize] == 1 {
+            if self.pieces[(x + y * 8) as usize] == 1 {
                 // 反転させる場合
                 if flip {
                     for _i in 0..8 {
                         x -= dx;
                         y -= dy;
-                        if self.pieces[(x+y*8) as usize] == 1 {
-                            return true
+                        if self.pieces[(x + y * 8) as usize] == 1 {
+                            return true;
                         }
-                        self.pieces[(x+y*8) as usize] = 1;
-                        self.enemy_pieces[(x+y*8) as usize] = 0;
+                        self.pieces[(x + y * 8) as usize] = 1;
+                        self.enemy_pieces[(x + y * 8) as usize] = 0;
                     }
                 }
                 return true;
@@ -175,19 +180,27 @@ impl State {
 
     /// 任意のマスが合法手かどうか
     pub fn is_legal_action_xy(&mut self, x: u8, y: u8, flip: bool) -> bool {
-
         // 空きがない場合
-        if self.enemy_pieces[(x+y*8) as usize] == 1 || self.pieces[(x+y*8) as usize] == 1 {
-            return false
+        if self.enemy_pieces[(x + y * 8) as usize] == 1 || self.pieces[(x + y * 8) as usize] == 1 {
+            return false;
         }
 
         // 意思を置く
         if flip {
-            self.pieces[(x+y*8) as usize] = 1;
+            self.pieces[(x + y * 8) as usize] = 1;
         }
 
         let mut flag = false;
-        for direction in [Direction::Up, Direction::Down, Direction::Left, Direction::Right, Direction::UpLeft, Direction::UpRight, Direction::DownLeft, Direction::DownRight] {
+        for direction in [
+            Direction::Up,
+            Direction::Down,
+            Direction::Left,
+            Direction::Right,
+            Direction::UpLeft,
+            Direction::UpRight,
+            Direction::DownLeft,
+            Direction::DownRight,
+        ] {
             if self.is_legal_action_xy_dxy(x, y, direction, flip) {
                 flag = true;
             }
@@ -202,7 +215,11 @@ impl State {
 
 impl Display for State {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        let ox = if self.is_first_player() {("o", "x")} else {("x", "o")};
+        let ox = if self.is_first_player() {
+            ("o", "x")
+        } else {
+            ("x", "o")
+        };
         let mut str = "".to_string();
         for i in 0..64 {
             if self.pieces[i] == 1 {
@@ -229,4 +246,3 @@ impl Display for State {
 // fn argmax(collection: Vec<f64>){}
 // /// モンテカルロ木探索の行動選択
 // fn mcts_action(state: State){}
-

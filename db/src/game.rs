@@ -1,12 +1,16 @@
-use diesel::{insert_into, pg::PgConnection, update};
+use crate::error::DbError;
 use crate::models::*;
 use diesel::prelude::*;
-use crate::error::DbError;
+use diesel::{insert_into, pg::PgConnection, update};
 
-
-pub fn create_new_game(con: &mut PgConnection, player1_id: i32, player2_id: i32,status: &str)->Result<i32, DbError>{
-    use crate::schema::games::dsl::games;
+pub fn create_new_game(
+    con: &mut PgConnection,
+    player1_id: i32,
+    player2_id: i32,
+    status: &str,
+) -> Result<i32, DbError> {
     use crate::schema;
+    use crate::schema::games::dsl::games;
 
     let new_game = NewGame {
         player1_id,
@@ -19,11 +23,14 @@ pub fn create_new_game(con: &mut PgConnection, player1_id: i32, player2_id: i32,
         finished_at: None,
     };
 
-    let result = insert_into(games).values(&new_game).returning(schema::games::game_id).get_result(con)?;
+    let result = insert_into(games)
+        .values(&new_game)
+        .returning(schema::games::game_id)
+        .get_result(con)?;
     Ok(result)
 }
 
-pub fn get_game_by_id(con: &mut PgConnection, id: i32) -> Result<Game,DbError>{
+pub fn get_game_by_id(con: &mut PgConnection, id: i32) -> Result<Game, DbError> {
     use crate::schema::games::dsl::*;
 
     let game = games.filter(game_id.eq(id)).first(con)?;
@@ -31,21 +38,37 @@ pub fn get_game_by_id(con: &mut PgConnection, id: i32) -> Result<Game,DbError>{
     Ok(game)
 }
 
-pub fn get_games_by_player_id(con: &mut PgConnection, player_id: i32) -> Result<Vec<Game>,DbError>{
+pub fn get_games_by_player_id(
+    con: &mut PgConnection,
+    player_id: i32,
+) -> Result<Vec<Game>, DbError> {
     use crate::schema::games::dsl::*;
 
-    let games_vec = games.filter(player1_id.eq(player_id).or(player2_id.eq(player_id))).load(con)?;
+    let games_vec = games
+        .filter(player1_id.eq(player_id).or(player2_id.eq(player_id)))
+        .load(con)?;
 
     Ok(games_vec)
 }
 
-pub fn update_game_phase<'a>(con: &mut PgConnection, _game_id: i32, black: &'a str, white: &'a str, next_turn: i32, _status: &'a str) -> Result<(),DbError> {
+pub fn update_game_phase<'a>(
+    con: &mut PgConnection,
+    _game_id: i32,
+    black: &'a str,
+    white: &'a str,
+    next_turn: i32,
+    _status: &'a str,
+) -> Result<(), DbError> {
     use crate::schema::games::dsl::*;
 
     update(games.filter(game_id.eq(_game_id)))
-        .set((black_board.eq(black), white_board.eq(white), current_turn.eq(next_turn), status.eq(_status)))
+        .set((
+            black_board.eq(black),
+            white_board.eq(white),
+            current_turn.eq(next_turn),
+            status.eq(_status),
+        ))
         .execute(con)?;
 
     Ok(())
 }
-

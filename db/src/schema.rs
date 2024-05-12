@@ -55,9 +55,4 @@ diesel::joinable!(histories -> games (game_id));
 diesel::joinable!(histories -> moves (move_id));
 diesel::joinable!(moves -> games (game_id));
 
-diesel::allow_tables_to_appear_in_same_query!(
-    games,
-    histories,
-    moves,
-    users,
-);
+diesel::allow_tables_to_appear_in_same_query!(games, histories, moves, users,);
